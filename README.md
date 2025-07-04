@@ -102,3 +102,118 @@ print(matrix)
 ---
 
 These snippets are short but can trip up candidates who haven’t internalized Python’s behavior around loop-`else`, mutable defaults, `try/finally`, and list references. Asking them to **explain** their answer will quickly reveal whether they truly understand the language.
+
+
+
+
+Here are four **basic “predict the output”** snippets—each short, self-contained, and highlighting a common Python gotcha. For each, ask the candidate to state what prints and **why**.
+
+---
+
+### 1. Loop `else` with no `break`
+
+```python
+for i in range(3):
+    print(i)
+else:
+    print("Done")
+```
+
+**Expected output:**
+
+```
+0
+1
+2
+Done
+```
+
+**Why:**
+
+* The `for` runs through all values (0,1,2) without hitting a `break`.
+* The `else` on a loop executes only if no `break` occurred.
+
+---
+
+### 2. Loop `else` with a `break`
+
+```python
+for ch in "hello":
+    if ch == "x":
+        print("Found x")
+        break
+else:
+    print("No x found")
+```
+
+**Expected output:**
+
+```
+No x found
+```
+
+**Why:**
+
+* The loop never sees an `"x"` character, so it completes normally.
+* Since there’s no `break`, the `else` block runs.
+
+---
+
+### 3. Chained comparison
+
+```python
+x = 5
+print(1 < x < 10)
+print(1 < x and x < 10)
+```
+
+**Expected output:**
+
+```
+True
+True
+```
+
+**Why:**
+
+* Python supports chained comparisons: `1 < x < 10` is equivalent to `(1 < x) and (x < 10)`, but evaluated more efficiently (only one `x` lookup).
+
+---
+
+### 4. Mutable default argument
+
+```python
+def add_item(item, lst=[]):
+    lst.append(item)
+    return lst
+
+print(add_item("a"))
+print(add_item("b"))
+print(add_item("c", []))
+print(add_item("d"))
+```
+
+**Expected output:**
+
+```
+['a']
+['a', 'b']
+['c']
+['a', 'b', 'd']
+```
+
+**Why:**
+
+* The default list `lst` is created once at function definition.
+* Calls without an explicit `lst` reuse that same list, accumulating items.
+* Passing `[]` forces a new list for that call only.
+
+---
+
+These short snippets are great for verifying that a candidate really understands:
+
+* **Loop/else** semantics
+* **Comparison chaining**
+* **Default argument evaluation**
+
+Ask them to **explain** each line of execution to ensure they’re not just memorizing outputs.
